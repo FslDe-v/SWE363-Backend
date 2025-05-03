@@ -10,7 +10,10 @@ import userRoutes from "./routes/users.js"; // Import user routes
 
 dotenv.config();
 const app = express();
-
+// Test
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", timestamp: Date.now() });
+});
 // Middleware
 app.use(express.json());
 app.use(cors());
