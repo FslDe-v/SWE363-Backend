@@ -1,13 +1,16 @@
 {
-  "name": "kfupm-connect-backend",
+  "name": "backend",
   "version": "1.0.0",
+  "main": "server.js",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "seed": "node scripts/seed.js",
-    "lint": "eslint ."
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FslDe-v/SWE363-Backend.git"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -25,5 +28,13 @@
     "mongodb-memory-server": "^8.0.0",
     "nodemon": "^2.0.0",
     "supertest": "^6.0.0"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FslDe-v/SWE363-Backend/issues"
+  },
+  "homepage": "https://github.com/FslDe-v/SWE363-Backend#readme",
+  "description": ""
 }
