@@ -254,11 +254,3 @@ The base URL for all API endpoints is `/api`. Authentication is handled via JWT 
         ```json
         { "message": "Not authorized, staff only" } // or other auth/server errors
         ```
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-[MIT](LICENSE) <!-- Optional: Add a LICENSE file if applicable -->
