@@ -10,6 +10,11 @@ import userRoutes from "./routes/users.js"; // Import user routes
 
 dotenv.config();
 const app = express();
+// log all requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 // Test
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: Date.now() });

@@ -9,6 +9,15 @@ const eventSchema = new mongoose.Schema({
   imageUrl: { type: String },
   tags: [String],
   enrolled: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  interestProfile: {
+    social: { type: Number, default: 3, min: 1, max: 5 },
+    outdoorsy: { type: Number, default: 3, min: 1, max: 5 },
+    creative: { type: Number, default: 3, min: 1, max: 5 },
+    intellectual: { type: Number, default: 3, min: 1, max: 5 },
+    relaxed: { type: Number, default: 3, min: 1, max: 5 },
+  },
+  
 });
 
 export default mongoose.model("Event", eventSchema);
+
