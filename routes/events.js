@@ -1,5 +1,6 @@
 import express from "express";
 import Event from "../models/Event.js";
+import User from "../models/User.js"; // Import User model
 import jwt from "jsonwebtoken";
 import process from "node:process";
 const router = express.Router();
@@ -17,10 +18,70 @@ function protect(req, res, next) {
   }
 }
 
-// get all events
-router.get("/", async (req, res) => {
-  const events = await Event.find().lean();
-  res.json(events);
+// Helper function to calculate cosine similarity
+function calculateCosineSimilarity(profileA, profileB) {
+  const keys = ["social", "outdoorsy", "creative", "intellectual", "relaxed"];
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+
+  for (const key of keys) {
+    const valA = profileA[key] || 0;
+    const valB = profileB[key] || 0;
+    dotProduct += valA * valB;
+    normA += valA * valA;
+    normB += valB * valB;
+  }
+
+  normA = Math.sqrt(normA);
+  normB = Math.sqrt(normB);
+
+  if (normA === 0 || normB === 0) {
+    return 0; // Or handle as appropriate, e.g., if one profile is all zeros
+  }
+  return dotProduct / (normA * normB);
+}
+
+// get all events, sorted by similarity to user's interests
+router.get("/", protect, async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.userId).lean();
+
+    const allEvents = await Event.find().lean();
+    const availableEvents = allEvents.filter(
+      (event) =>
+        !event.enrolled ||
+        !event.enrolled.some(
+          (enrolledUserId) => enrolledUserId.toString() === req.userId
+        )
+    );
+
+    if (!currentUser || !currentUser.interests) {
+      return res.json(availableEvents.slice(0, 5));
+    }
+
+    const userInterests = currentUser.interests;
+
+    const eventsWithSimilarity = availableEvents.map((event) => {
+      const similarity = calculateCosineSimilarity(
+        userInterests,
+        event.interestProfile
+      );
+      return { ...event, similarity };
+    });
+
+    eventsWithSimilarity.sort((a, b) => b.similarity - a.similarity);
+
+    const top5Events = eventsWithSimilarity.slice(0, 5).map((e) => {
+      const { similarity, ...eventData } = e;
+      return eventData;
+    });
+
+    res.json(top5Events);
+  } catch (error) {
+    console.error("Error fetching recommended events:", error);
+    res.status(500).send("Error fetching recommended events");
+  }
 });
 
 // get only events where this user is enrolled

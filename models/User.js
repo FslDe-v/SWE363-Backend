@@ -26,7 +26,11 @@ const userSchema = new mongoose.Schema({
         enum: ['student', 'staff'],
     },
     interests: {
-        type: Object,
+        social: { type: Number, default: 3, min: 1, max: 5 },
+        outdoorsy: { type: Number, default: 3, min: 1, max: 5 },
+        creative: { type: Number, default: 3, min: 1, max: 5 },
+        intellectual: { type: Number, default: 3, min: 1, max: 5 },
+        relaxed: { type: Number, default: 3, min: 1, max: 5 },
     },
 });
 
